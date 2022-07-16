@@ -22,9 +22,21 @@ public class GameController : Singleton<GameController>
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.W))
+        if(Input.GetKey(KeyCode.W))
         {
-            dice.Move(Direction.XPlus);
+            if (dice.Move(Direction.XPlus)) dicePos = (dicePos.Item1 + 1, dicePos.Item2);
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            if (dice.Move(Direction.XMinus)) dicePos = (dicePos.Item1 - 1, dicePos.Item2);
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            if (dice.Move(Direction.ZPlus)) dicePos = (dicePos.Item1, dicePos.Item2 + 1);
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            if (dice.Move(Direction.ZMinus)) dicePos = (dicePos.Item1, dicePos.Item2 - 1);
         }
 
     }
