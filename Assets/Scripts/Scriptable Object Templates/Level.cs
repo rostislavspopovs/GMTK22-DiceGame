@@ -6,6 +6,7 @@ using UnityEngine;
 [SerializeField]
 public class Level : ScriptableObject
 {
+    [Header("Levels")]
     [SerializeField] private List<Texture2D> floors = new List<Texture2D>();
 
     public int FloorNum => floors.Count;

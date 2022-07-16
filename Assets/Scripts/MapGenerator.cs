@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class MapGenerator : Singleton<MapGenerator>
 {
+    [Header("Map Parent")]
+    [SerializeField] private Transform mapParent;
     [Header("Prefabs")]
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] private GameObject wallPrefab;
     [SerializeField] private GameObject finishPrefab;
 
-    private List<TileMap> GenerateMap(Level level)
+    public List<TileMap> GenerateMap(Level level)
     {
         List<TileMap> tileMaps = new List<TileMap>();
 
@@ -18,6 +20,8 @@ public class MapGenerator : Singleton<MapGenerator>
         {
 
             TileMap floorMap = new TileMap(floorTex.width, floorTex.height);
+            GameObject floorParent = Instantiate(new GameObject("Floor " + f), mapParent);
+            
 
             Color[] pixels = floorTex.GetPixels(0);
             for (int y = 0; y < floorTex.height; ++y)
@@ -30,17 +34,17 @@ public class MapGenerator : Singleton<MapGenerator>
                     //Debug.Log(x + " " + y + " " + pixel);
                     if (pixel != Color.black)
                     {
-                        Instantiate(tilePrefab, new Vector3(x, f*4+0, y), new Quaternion(0, 0, 0, 0));
+                        Instantiate(tilePrefab, new Vector3(x, f*4+0, y), new Quaternion(0, 0, 0, 0), floorParent.transform);
                         floorMap.SetTileState(x, y, TileMap.TileState.TILE);
                     }
                     if (pixel == Color.blue)
                     {
-                        Instantiate(wallPrefab, new Vector3(x, f*4+0.5f, y), new Quaternion(0, 0, 0, 0));
+                        Instantiate(wallPrefab, new Vector3(x, f*4+0.5f, y), new Quaternion(0, 0, 0, 0), floorParent.transform);
                         floorMap.SetTileState(x, y, TileMap.TileState.WALL);
                     }
                     if (pixel == Color.red)
                     {
-                        Instantiate(finishPrefab, new Vector3(x, f*4+0.5f, y), new Quaternion(0, 0, 0, 0));
+                        Instantiate(finishPrefab, new Vector3(x, f*4+0.5f, y), new Quaternion(0, 0, 0, 0), floorParent.transform);
                         floorMap.SetTileState(x, y, TileMap.TileState.FINISH);
                     }
                 }
@@ -50,6 +54,15 @@ public class MapGenerator : Singleton<MapGenerator>
         }
 
         return tileMaps;
+    }
+
+    public void ClearMap()
+    {
+        int childCount = mapParent.childCount;
+        for (int i = childCount - 1; i >= 0; i--)
+        {
+            Destroy(mapParent.GetChild(i).gameObject);
+        }
     }
 
 }

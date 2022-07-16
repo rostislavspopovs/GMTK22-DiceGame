@@ -10,6 +10,9 @@ public class TileMap
     private int width;
     private int depth;
 
+    private (int, int) startTile;
+    private (int, int) finishTile;
+
     public TileMap(int width, int depth)
     {
         map = new TileState[width, depth];
@@ -20,6 +23,8 @@ public class TileMap
     public void SetTileState(int x, int y, TileState state)
     {
         map[x, y] = state;
+        if (state == TileState.START) startTile = (x, y);
+        else if (state == TileState.FINISH) finishTile = (x, y);
     }
 
     public bool IsVoid(int x, int y)
@@ -33,4 +38,10 @@ public class TileMap
         return map[x, y] == TileState.WALL;
     }
 
+    public bool IsAtFinish(int x, int y) => (x, y) == finishTile;
+
+    public (int, int) GetStartTile() => startTile;
+
+    public (int, int) GetFinishTile() => finishTile;
+ 
 }
