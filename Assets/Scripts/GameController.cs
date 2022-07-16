@@ -15,6 +15,12 @@ public class GameController : Singleton<GameController>
 
     private List<TileMap> levelTileMaps;
 
+    private int stepsLeft;
+
+    private bool inMoveSequence;
+
+    private bool interruptSequence;
+
     void Start()
     {
         StartLevel(0);
@@ -22,39 +28,118 @@ public class GameController : Singleton<GameController>
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.W))
+        if (!inMoveSequence)
         {
-            if (CanMoveInDir(Direction.XPlus))
+            if (Input.GetKeyDown(KeyCode.W))
             {
-                if (dice.Move(Direction.XPlus)) dicePos = (dicePos.Item1 + 1, dicePos.Item2);
+                CallNextStep(Direction.XPlus);
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                CallNextStep(Direction.XMinus);
+            }
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                CallNextStep(Direction.ZPlus);
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                CallNextStep(Direction.ZMinus);
             }
         }
-        if (Input.GetKeyDown(KeyCode.S))
+        else { Debug.Log("Key blocked -- already in sequence"); }
+    }
+
+    public void ResetSteps()
+    {
+        stepsLeft = GetCurrentNumberOnTop();
+        inMoveSequence = false;
+    }
+
+    public void CallNextStep(Direction dir)
+    {
+       
+        if(stepsLeft == 0 || interruptSequence)
         {
-            if (CanMoveInDir(Direction.XMinus))
-            {
-                if (dice.Move(Direction.XMinus)) dicePos = (dicePos.Item1 - 1, dicePos.Item2);
-            }
+            inMoveSequence = false;
+            ResetSteps();
+            return;
         }
-        if (Input.GetKeyDown(KeyCode.A))
+
+        inMoveSequence = true;
+        switch (dir)
         {
-            if (CanMoveInDir(Direction.ZPlus))
-            {
-                if (dice.Move(Direction.ZPlus)) dicePos = (dicePos.Item1, dicePos.Item2 + 1);
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            if (CanMoveInDir(Direction.ZMinus))
-            { 
-                if (dice.Move(Direction.ZMinus)) dicePos = (dicePos.Item1, dicePos.Item2 - 1);
-            }
+            case Direction.XPlus:
+                {
+                    if (!CanMoveInDir(Direction.XPlus))
+                    {
+                        ResetSteps(); Debug.Log("Hit Wall"); 
+                    }
+                    else 
+                    { 
+                        if (dice.TryMove(Direction.XPlus))
+                        {
+                            dicePos = (dicePos.Item1 + 1, dicePos.Item2);
+                            stepsLeft--;
+                        }
+                    }
+                    break;
+                }
+            case Direction.XMinus:
+                {
+                    if (!CanMoveInDir(Direction.XMinus))
+                    {
+                        ResetSteps(); Debug.Log("Hit Wall");
+                    }
+                    else
+                    {
+                        if (dice.TryMove(Direction.XMinus))
+                        {
+                            dicePos = (dicePos.Item1 - 1, dicePos.Item2);
+                            stepsLeft--;
+                        }
+                    }
+                    break;
+                }
+            case Direction.ZPlus:
+                {
+                    if (!CanMoveInDir(Direction.ZPlus))
+                    {
+                        ResetSteps(); Debug.Log("Hit Wall");
+                    }
+                    else
+                    {
+                        if (dice.TryMove(Direction.ZPlus))
+                        {
+                            dicePos = (dicePos.Item1, dicePos.Item2 + 1);
+                            stepsLeft--;
+                        }
+                    }
+                    break;
+                }
+            case Direction.ZMinus:
+                {
+                    if (!CanMoveInDir(Direction.ZMinus))
+                    {
+                        ResetSteps(); Debug.Log("Hit Wall");
+                    }
+                    else
+                    {
+                        if (dice.TryMove(Direction.ZMinus))
+                        {
+                            dicePos = (dicePos.Item1, dicePos.Item2 - 1);
+                            stepsLeft--;
+                        }
+                    }
+                    break;
+                }
         }
     }
 
-    public void CallNextStep()
+    private void SteppedOnVoid()
     {
-
+        interruptSequence = true;
+        Debug.Log("Oops you died");
     }
 
     private void StartLevel(int level)
@@ -78,21 +163,25 @@ public class GameController : Singleton<GameController>
             case Direction.XPlus:
             {
                     Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1 + 1, dicePos.Item2));
+                    if (GetCurrentTileMap().IsVoid(dicePos.Item1 + 1, dicePos.Item2)) SteppedOnVoid();
                     return !GetCurrentTileMap().IsWall(dicePos.Item1 + 1, dicePos.Item2);             
             }
             case Direction.XMinus:
             {
                     Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1 - 1, dicePos.Item2));
+                    if (GetCurrentTileMap().IsVoid(dicePos.Item1 - 1, dicePos.Item2)) SteppedOnVoid();
                     return !GetCurrentTileMap().IsWall(dicePos.Item1 - 1, dicePos.Item2);
             }
             case Direction.ZPlus:
             {
                     Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1, dicePos.Item2 + 1));
+                    if (GetCurrentTileMap().IsVoid(dicePos.Item1, dicePos.Item2 + 1)) SteppedOnVoid();
                     return !GetCurrentTileMap().IsWall(dicePos.Item1, dicePos.Item2 + 1);
             }
             case Direction.ZMinus:
             {
                     Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1, dicePos.Item2 - 1));
+                    if (GetCurrentTileMap().IsVoid(dicePos.Item1, dicePos.Item2 - 1)) SteppedOnVoid();
                     return !GetCurrentTileMap().IsWall(dicePos.Item1, dicePos.Item2 - 1);
             }
         }
@@ -102,6 +191,11 @@ public class GameController : Singleton<GameController>
     public TileMap GetCurrentTileMap()
     {
         return levelTileMaps[diceFloor-1];
+    }
+
+    public int GetCurrentNumberOnTop()
+    {
+        return 3;
     }
 
 }

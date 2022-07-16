@@ -35,7 +35,7 @@ public class Dice : MonoBehaviour
         
     }
 
-    public bool Move(GameController.Direction dir)
+    public bool TryMove(GameController.Direction dir)
     {
         if (!moving)
         {
@@ -105,7 +105,7 @@ public class Dice : MonoBehaviour
                 }
         }
         moving = false;
-        GameController.Instance.CallNextStep();
+        GameController.Instance.CallNextStep(dir);
         //toggleAnimator(true);
     }
 
