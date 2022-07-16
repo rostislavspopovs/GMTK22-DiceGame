@@ -31,7 +31,7 @@ public class MapGenerator : Singleton<MapGenerator>
                     int index = x + floorTex.width * y;
 
                     Color pixel = pixels[index];
-                    //Debug.Log(x + " " + y + " " + pixel);
+
                     if (pixel != Color.black)
                     {
                         GameObject tilePrefab = tilePrefabs[Random.Range(0, tilePrefabs.Length)];
@@ -43,6 +43,10 @@ public class MapGenerator : Singleton<MapGenerator>
                         GameObject wallPrefab = wallPrefabs[Random.Range(0, wallPrefabs.Length)];
                         Instantiate(wallPrefab, new Vector3(x, f*4+0.5f, y), new Quaternion(0, 0, 0, 0), floorParent.transform);
                         floorMap.SetTileState(x, y, TileMap.TileState.WALL);
+                    }
+                    if (pixel == Color.green)
+                    {
+                        floorMap.SetTileState(x, y, TileMap.TileState.START);
                     }
                     if (pixel == Color.red)
                     {

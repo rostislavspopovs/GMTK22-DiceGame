@@ -30,7 +30,7 @@ public class GameController : Singleton<GameController>
 
     private void SpawnDie((int,int) spawnPos, int floor)
     {
-        Instantiate(dicePrefab, new Vector3(spawnPos.Item1, floor * 4 + 2.5f, spawnPos.Item2), new Quaternion(0,0,0,1));
+        Instantiate(dicePrefab, new Vector3(spawnPos.Item1, floor * 4 + 0.5f, spawnPos.Item2), new Quaternion(0,0,0,1));
     }
 
 }
