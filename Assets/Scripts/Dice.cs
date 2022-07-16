@@ -43,6 +43,7 @@ public class Dice : MonoBehaviour
             StartCoroutine(MoveEnumerator(dir));
             return true;
         }
+
         return false;
     }
 

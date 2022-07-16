@@ -23,8 +23,13 @@ public class TileMap
     public void SetTileState(int x, int y, TileState state)
     {
         map[x, y] = state;
-        if (state == TileState.START) startTile = (x, y);
-        else if (state == TileState.FINISH) finishTile = (x, y);
+        if (state == TileState.START) { startTile = (x, y); Debug.Log("Start Tile: " + x + " " + y); }
+        else if (state == TileState.FINISH) { finishTile = (x, y); Debug.Log("Finish Tile: " + x + " " + y); }
+    }
+
+    public TileState GetTileState(int x, int y)
+    {
+        return map[x, y];
     }
 
     public bool IsVoid(int x, int y)

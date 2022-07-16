@@ -22,23 +22,34 @@ public class GameController : Singleton<GameController>
 
     void Update()
     {
-        if(Input.GetKey(KeyCode.W))
+        if(Input.GetKeyDown(KeyCode.W))
         {
-            if (dice.Move(Direction.XPlus)) dicePos = (dicePos.Item1 + 1, dicePos.Item2);
+            if (CanMoveInDir(Direction.XPlus))
+            {
+                if (dice.Move(Direction.XPlus)) dicePos = (dicePos.Item1 + 1, dicePos.Item2);
+            }
         }
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.S))
         {
-            if (dice.Move(Direction.XMinus)) dicePos = (dicePos.Item1 - 1, dicePos.Item2);
+            if (CanMoveInDir(Direction.XMinus))
+            {
+                if (dice.Move(Direction.XMinus)) dicePos = (dicePos.Item1 - 1, dicePos.Item2);
+            }
         }
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            if (dice.Move(Direction.ZPlus)) dicePos = (dicePos.Item1, dicePos.Item2 + 1);
+            if (CanMoveInDir(Direction.ZPlus))
+            {
+                if (dice.Move(Direction.ZPlus)) dicePos = (dicePos.Item1, dicePos.Item2 + 1);
+            }
         }
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.D))
         {
-            if (dice.Move(Direction.ZMinus)) dicePos = (dicePos.Item1, dicePos.Item2 - 1);
+            if (CanMoveInDir(Direction.ZMinus))
+            { 
+                if (dice.Move(Direction.ZMinus)) dicePos = (dicePos.Item1, dicePos.Item2 - 1);
+            }
         }
-
     }
 
     private void StartLevel(int level)
@@ -53,6 +64,39 @@ public class GameController : Singleton<GameController>
         dice = diceObj.GetComponent<Dice>();
         dicePos = spawnPos;
         diceFloor = floor;
+    }
+
+    public bool CanMoveInDir(Direction dir)
+    {
+        switch (dir)
+        {
+            case Direction.XPlus:
+            {
+                    Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1 + 1, dicePos.Item2));
+                    return !GetCurrentTileMap().IsWall(dicePos.Item1 + 1, dicePos.Item2);             
+            }
+            case Direction.XMinus:
+            {
+                    Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1 - 1, dicePos.Item2));
+                    return !GetCurrentTileMap().IsWall(dicePos.Item1 - 1, dicePos.Item2);
+            }
+            case Direction.ZPlus:
+            {
+                    Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1, dicePos.Item2 + 1));
+                    return !GetCurrentTileMap().IsWall(dicePos.Item1, dicePos.Item2 + 1);
+            }
+            case Direction.ZMinus:
+            {
+                    Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1, dicePos.Item2 - 1));
+                    return !GetCurrentTileMap().IsWall(dicePos.Item1, dicePos.Item2 - 1);
+            }
+        }
+        return false;
+    }
+
+    public TileMap GetCurrentTileMap()
+    {
+        return levelTileMaps[diceFloor-1];
     }
 
 }
