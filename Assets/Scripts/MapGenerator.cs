@@ -35,8 +35,10 @@ public class MapGenerator : Singleton<MapGenerator>
                     if (pixel != Color.black)
                     {
                         GameObject tilePrefab = tilePrefabs[Random.Range(0, tilePrefabs.Length)];
-                        Instantiate(tilePrefab, new Vector3(x, f*4+0, y), new Quaternion(0, 0, 0, 0), floorParent.transform);
+                        GameObject tileObject = Instantiate(tilePrefab, new Vector3(x, f*4+0, y), new Quaternion(0, 0, 0, 0), floorParent.transform);
                         floorMap.SetTileState(x, y, TileMap.TileState.TILE);
+                        
+                        tileObject.transform.RotateAround(tileObject.transform.position, tileObject.transform.up, 90f * Random.Range(0, 5));
                     }
                     if (pixel == Color.blue)
                     {
