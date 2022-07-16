@@ -52,6 +52,11 @@ public class GameController : Singleton<GameController>
         }
     }
 
+    public void CallNextStep()
+    {
+
+    }
+
     private void StartLevel(int level)
     {
         levelTileMaps = MapGenerator.Instance.GenerateMap(levels[level]);

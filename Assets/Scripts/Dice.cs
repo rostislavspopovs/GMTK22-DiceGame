@@ -105,6 +105,7 @@ public class Dice : MonoBehaviour
                 }
         }
         moving = false;
+        GameController.Instance.CallNextStep();
         //toggleAnimator(true);
     }
 
