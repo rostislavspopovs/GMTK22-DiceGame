@@ -6,6 +6,7 @@ public class MapGenerator : MonoBehaviour
 {
     [Header("Prefabs")]
     [SerializeField] private GameObject tilePrefab;
+    [SerializeField] private GameObject wallPrefab;
 
     [Header("Level Scriptable Object")]
     [SerializeField] private Level level;
@@ -39,7 +40,15 @@ public class MapGenerator : MonoBehaviour
 
                     Color pixel = pixels[index];
                     Debug.Log(x + " " + y + " " + pixel);
-                    if(pixel == Color.white) Instantiate(tilePrefab, new Vector3(x, 0, y), new Quaternion(0,0,0,0));  
+                    if (pixel == Color.white && pixel == Color.green)
+                    {
+                        Instantiate(tilePrefab, new Vector3(x, 0, y), new Quaternion(0, 0, 0, 0));
+                    }
+                    else if (pixel == Color.blue)
+                    {
+                        Instantiate(tilePrefab, new Vector3(x, 0, y), new Quaternion(0, 0, 0, 0));
+                        Instantiate(wallPrefab, new Vector3(x, 0.5f, y), new Quaternion(0, 0, 0, 0));
+                    }
                 }
             }
 
