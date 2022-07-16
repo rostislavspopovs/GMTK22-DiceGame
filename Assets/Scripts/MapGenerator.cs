@@ -7,8 +7,8 @@ public class MapGenerator : Singleton<MapGenerator>
     [Header("Map Parent")]
     [SerializeField] private Transform mapParent;
     [Header("Prefabs")]
-    [SerializeField] private GameObject tilePrefab;
-    [SerializeField] private GameObject wallPrefab;
+    [SerializeField] private GameObject[] tilePrefabs;
+    [SerializeField] private GameObject[] wallPrefabs;
     [SerializeField] private GameObject finishPrefab;
 
     public List<TileMap> GenerateMap(Level level)
@@ -34,11 +34,13 @@ public class MapGenerator : Singleton<MapGenerator>
                     //Debug.Log(x + " " + y + " " + pixel);
                     if (pixel != Color.black)
                     {
+                        GameObject tilePrefab = tilePrefabs[Random.Range(0, tilePrefabs.Length)];
                         Instantiate(tilePrefab, new Vector3(x, f*4+0, y), new Quaternion(0, 0, 0, 0), floorParent.transform);
                         floorMap.SetTileState(x, y, TileMap.TileState.TILE);
                     }
                     if (pixel == Color.blue)
                     {
+                        GameObject wallPrefab = wallPrefabs[Random.Range(0, wallPrefabs.Length)];
                         Instantiate(wallPrefab, new Vector3(x, f*4+0.5f, y), new Quaternion(0, 0, 0, 0), floorParent.transform);
                         floorMap.SetTileState(x, y, TileMap.TileState.WALL);
                     }
