@@ -136,16 +136,25 @@ public class GameController : Singleton<GameController>
         }
     }
 
-    private void SteppedOnVoid()
+    private void SteppedOnVoid(Direction fromDir)
     {
         interruptSequence = true;
-        Debug.Log("Oops you died");
+
+        //switch (fromDir)
+        //{
+        //}
+
+
+        dice.Ragdoll(Vector3.forward*50);
+
     }
+
+    
 
     private void StartLevel(int level)
     {
         levelTileMaps = MapGenerator.Instance.GenerateMap(levels[level]);
-        SpawnDie(levelTileMaps[0].GetStartTile(),1);
+        SpawnDie(levelTileMaps[1].GetStartTile(), 2);
     }
 
     private void SpawnDie((int,int) spawnPos, int floor)
@@ -163,25 +172,25 @@ public class GameController : Singleton<GameController>
             case Direction.XPlus:
             {
                     Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1 + 1, dicePos.Item2));
-                    if (GetCurrentTileMap().IsVoid(dicePos.Item1 + 1, dicePos.Item2)) SteppedOnVoid();
+                    if (GetCurrentTileMap().IsVoid(dicePos.Item1 + 1, dicePos.Item2)) SteppedOnVoid(dir);
                     return !GetCurrentTileMap().IsWall(dicePos.Item1 + 1, dicePos.Item2);             
             }
             case Direction.XMinus:
             {
                     Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1 - 1, dicePos.Item2));
-                    if (GetCurrentTileMap().IsVoid(dicePos.Item1 - 1, dicePos.Item2)) SteppedOnVoid();
+                    if (GetCurrentTileMap().IsVoid(dicePos.Item1 - 1, dicePos.Item2)) SteppedOnVoid(dir);
                     return !GetCurrentTileMap().IsWall(dicePos.Item1 - 1, dicePos.Item2);
             }
             case Direction.ZPlus:
             {
                     Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1, dicePos.Item2 + 1));
-                    if (GetCurrentTileMap().IsVoid(dicePos.Item1, dicePos.Item2 + 1)) SteppedOnVoid();
+                    if (GetCurrentTileMap().IsVoid(dicePos.Item1, dicePos.Item2 + 1)) SteppedOnVoid(dir);
                     return !GetCurrentTileMap().IsWall(dicePos.Item1, dicePos.Item2 + 1);
             }
             case Direction.ZMinus:
             {
                     Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1, dicePos.Item2 - 1));
-                    if (GetCurrentTileMap().IsVoid(dicePos.Item1, dicePos.Item2 - 1)) SteppedOnVoid();
+                    if (GetCurrentTileMap().IsVoid(dicePos.Item1, dicePos.Item2 - 1)) SteppedOnVoid(dir);
                     return !GetCurrentTileMap().IsWall(dicePos.Item1, dicePos.Item2 - 1);
             }
         }

@@ -20,7 +20,7 @@ public class Dice : MonoBehaviour
     void Start()
     {
         diceMesh = transform.GetChild(0);
-        pivotSquare =transform.GetChild(1);
+        pivotSquare = transform.GetChild(1);
         XP = pivotSquare.transform.GetChild(0);
         XM = pivotSquare.transform.GetChild(1);
         ZP = pivotSquare.transform.GetChild(2);
@@ -112,6 +112,13 @@ public class Dice : MonoBehaviour
     private void toggleAnimator(bool toggle)
     {
         anim.enabled = toggle;
+    }
+
+
+    public void Ragdoll(Vector3 force)
+    {
+        GetComponent<Rigidbody>().isKinematic = false;
+        GetComponent<Rigidbody>().AddForce(force, ForceMode.VelocityChange);
     }
 
 }
