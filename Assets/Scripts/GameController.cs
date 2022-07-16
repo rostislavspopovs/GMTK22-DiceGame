@@ -10,6 +10,8 @@ public class GameController : Singleton<GameController>
     private (int,int) dicePos;
     private int diceFloor;
 
+    private List<TileMap> levelTileMaps;
+
     void Start()
     {
         StartLevel(0);
@@ -20,8 +22,15 @@ public class GameController : Singleton<GameController>
         
     }
 
-    public void StartLevel(int level)
+    private void StartLevel(int level)
     {
-        MapGenerator.Instance.GenerateMap(levels[level]);
+        levelTileMaps = MapGenerator.Instance.GenerateMap(levels[level]);
+        SpawnDie(levelTileMaps[0].GetStartTile(),1);
     }
+
+    private void SpawnDie((int,int) spawnPos, int floor)
+    {
+        Instantiate(dicePrefab, new Vector3(spawnPos.Item1, floor * 4 + 2.5f, spawnPos.Item2), new Quaternion(0,0,0,1));
+    }
+
 }
