@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floors:
   - {fileID: 2800000, guid: 4506e75b4bfda0d4cae1414333856421, type: 3}
+  - {fileID: 2800000, guid: 993f7f70aa1c9ad498db0a13a99c27c5, type: 3}
