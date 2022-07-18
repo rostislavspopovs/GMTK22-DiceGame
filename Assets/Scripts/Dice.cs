@@ -54,9 +54,9 @@ public class Dice : MonoBehaviour
         {
             case GameController.Direction.XPlus:
                 {
-                    for (int d = 0; d < 18; d++)
+                    for (int d = 0; d < 30; d++)
                     {
-                        diceMesh.RotateAround(XP.position, Vector3.forward, -5);
+                        diceMesh.RotateAround(XP.position, Vector3.forward, -3);
                         yield return new WaitForSeconds(Time.deltaTime);
                     }
                     diceMesh.transform.position -= new Vector3(1, 0, 0);
@@ -67,9 +67,9 @@ public class Dice : MonoBehaviour
 
             case GameController.Direction.XMinus:
                 {
-                    for (int d = 0; d < 18; d++)
+                    for (int d = 0; d < 30; d++)
                     {
-                        diceMesh.RotateAround(XM.position, Vector3.forward, 5);
+                        diceMesh.RotateAround(XM.position, Vector3.forward, 3);
                         yield return new WaitForSeconds(Time.deltaTime);
                     }
                     diceMesh.transform.position -= new Vector3(-1, 0, 0);
@@ -80,9 +80,9 @@ public class Dice : MonoBehaviour
 
             case GameController.Direction.ZPlus:
                 {
-                    for (int d = 0; d < 18; d++)
+                    for (int d = 0; d < 30; d++)
                     {
-                        diceMesh.RotateAround(ZP.position, Vector3.right, 5);
+                        diceMesh.RotateAround(ZP.position, Vector3.right, 3);
                         yield return new WaitForSeconds(Time.deltaTime);
                     }
                     diceMesh.transform.position -= new Vector3(0, 0, 1);
@@ -93,9 +93,9 @@ public class Dice : MonoBehaviour
 
             case GameController.Direction.ZMinus:
                 {
-                    for (int d = 0; d < 18; d++)
+                    for (int d = 0; d < 30; d++)
                     {
-                        diceMesh.RotateAround(ZM.position, Vector3.right, -5);
+                        diceMesh.RotateAround(ZM.position, Vector3.right, -3);
                         yield return new WaitForSeconds(Time.deltaTime);
                     }
                     diceMesh.transform.position -= new Vector3(0, 0, -1);
@@ -119,6 +119,11 @@ public class Dice : MonoBehaviour
     {
         GetComponent<Rigidbody>().isKinematic = false;
         GetComponent<Rigidbody>().AddForce(force, ForceMode.VelocityChange);
+    }
+
+    public Transform getDiceMesh() 
+    {
+        return diceMesh;
     }
 
 }

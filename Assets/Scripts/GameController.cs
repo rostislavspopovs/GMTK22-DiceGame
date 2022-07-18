@@ -145,7 +145,7 @@ public class GameController : Singleton<GameController>
         //}
 
 
-        dice.Ragdoll(Vector3.forward*50);
+        dice.Ragdoll(Vector3.down*15);
 
     }
 
@@ -167,34 +167,29 @@ public class GameController : Singleton<GameController>
 
     public bool CanMoveInDir(Direction dir)
     {
+
+        int newX = dicePos.Item1;
+        int newZ = dicePos.Item2;
+
         switch (dir)
         {
-            case Direction.XPlus:
-            {
-                    Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1 + 1, dicePos.Item2));
-                    if (GetCurrentTileMap().IsVoid(dicePos.Item1 + 1, dicePos.Item2)) SteppedOnVoid(dir);
-                    return !GetCurrentTileMap().IsWall(dicePos.Item1 + 1, dicePos.Item2);             
-            }
-            case Direction.XMinus:
-            {
-                    Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1 - 1, dicePos.Item2));
-                    if (GetCurrentTileMap().IsVoid(dicePos.Item1 - 1, dicePos.Item2)) SteppedOnVoid(dir);
-                    return !GetCurrentTileMap().IsWall(dicePos.Item1 - 1, dicePos.Item2);
-            }
-            case Direction.ZPlus:
-            {
-                    Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1, dicePos.Item2 + 1));
-                    if (GetCurrentTileMap().IsVoid(dicePos.Item1, dicePos.Item2 + 1)) SteppedOnVoid(dir);
-                    return !GetCurrentTileMap().IsWall(dicePos.Item1, dicePos.Item2 + 1);
-            }
-            case Direction.ZMinus:
-            {
-                    Debug.Log(GetCurrentTileMap().GetTileState(dicePos.Item1, dicePos.Item2 - 1));
-                    if (GetCurrentTileMap().IsVoid(dicePos.Item1, dicePos.Item2 - 1)) SteppedOnVoid(dir);
-                    return !GetCurrentTileMap().IsWall(dicePos.Item1, dicePos.Item2 - 1);
-            }
+            case Direction.XPlus:   newX++; break;
+            case Direction.XMinus:  newX--; break;
+            case Direction.ZPlus:   newZ++; break;
+            case Direction.ZMinus:  newZ--; break;
         }
-        return false;
+        try 
+        {
+            Debug.Log(GetCurrentTileMap().GetTileState(newX, newZ));
+            if (GetCurrentTileMap().IsVoid(newX, newZ)) SteppedOnVoid(dir);
+            return !GetCurrentTileMap().IsWall(newX, newZ);   
+        } 
+        catch (System.IndexOutOfRangeException e)     
+        {
+            Debug.Log("Tile " + newX + "," + newZ + " throws " + e + " assuming void.");
+            SteppedOnVoid(dir);
+            return true;
+        }  
     }
 
     public TileMap GetCurrentTileMap()
@@ -204,7 +199,17 @@ public class GameController : Singleton<GameController>
 
     public int GetCurrentNumberOnTop()
     {
-        return 3;
+        int x = Mathf.RoundToInt(dice.getDiceMesh().transform.eulerAngles.x) % 360;
+        int z = Mathf.RoundToInt(dice.getDiceMesh().transform.eulerAngles.z) % 360;
+        if (x == 90) { return 5; }
+        else if (x == 270) { return 2; }
+        switch ((x+z)%360) {
+            case 0: return 1;
+            case 90: return 3;  
+            case 180: return 6;
+            case 270: return 4;
+        }
+        return 100;
     }
 
 }
