@@ -43,6 +43,8 @@ public class TileMap
         return map[x, y] == TileState.WALL;
     }
 
+    public bool IsSteppable(int x, int y) => !(IsVoid(x, y) || IsWall(x, y));
+
     public bool IsAtFinish(int x, int y) => (x, y) == finishTile;
 
     public (int, int) GetStartTile() => startTile;
