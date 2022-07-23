@@ -24,7 +24,7 @@ public class GameController : Singleton<GameController>
     void Start()
     {
         StartLevel(0);
-        EffectsAndOverlaysManager.Instance.CreateHighlights(dice.transform.position, Direction.XPlus, 5);
+        EffectsAndOverlaysManager.Instance.CreateHighlights(diceFloor, dicePos.Item1, dicePos.Item2, Direction.XPlus, 5);
     }
 
     void Update()
@@ -139,36 +139,6 @@ public class GameController : Singleton<GameController>
         }
     }
 
-    private void SteppedOnVoid(Direction fromDir)
-    {
-        interruptSequence = true;
-
-        //switch (fromDir)
-        //{
-        //}
-
-
-        dice.Ragdoll(Vector3.down*15);
-
-    }
-
-    
-
-    private void StartLevel(int level)
-    {
-        levelTileMaps = MapGenerator.Instance.GenerateMap(levels[level]);
-        SpawnDie(levelTileMaps[1].GetStartTile(), 2);
-        CameraController.Instance.SetFocus(dice.transform);
-    }
-
-    private void SpawnDie((int,int) spawnPos, int floor)
-    {
-        GameObject diceObj = Instantiate(dicePrefab, new Vector3(spawnPos.Item1, floor * 4 + 0.5f, spawnPos.Item2), new Quaternion(0,0,0,1));
-        dice = diceObj.GetComponent<Dice>();
-        dicePos = spawnPos;
-        diceFloor = floor;
-    }
-
     public bool CanMoveInDir(Direction dir)
     {
 
@@ -214,6 +184,38 @@ public class GameController : Singleton<GameController>
             case 270: return 4;
         }
         return 100;
+    }
+
+    public Vector3 TileToWorldPosition(int floor, int tileX, int tileY)
+    {
+        return new Vector3(tileX, floor * 4 + 0.5f, tileY);
+    }
+
+    private void SteppedOnVoid(Direction fromDir)
+    {
+        interruptSequence = true;
+
+        //switch (fromDir)
+        //{
+        //}
+
+
+        dice.Ragdoll(Vector3.down * 15);
+    }
+
+    private void StartLevel(int level)
+    {
+        levelTileMaps = MapGenerator.Instance.GenerateMap(levels[level]);
+        SpawnDie(levelTileMaps[1].GetStartTile(), 2);
+        CameraController.Instance.SetFocus(dice.transform);
+    }
+
+    private void SpawnDie((int, int) spawnPos, int floor)
+    {
+        GameObject diceObj = Instantiate(dicePrefab, TileToWorldPosition(floor, spawnPos.Item1, spawnPos.Item2), new Quaternion(0, 0, 0, 1));
+        dice = diceObj.GetComponent<Dice>();
+        dicePos = spawnPos;
+        diceFloor = floor;
     }
 
 }

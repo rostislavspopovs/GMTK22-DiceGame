@@ -19,9 +19,9 @@ public class EffectsAndOverlaysManager : Singleton<EffectsAndOverlaysManager>
         
     }
 
-    public void CreateHighlights(Vector3 dicePos, GameController.Direction direction, int length)
+    public void CreateHighlights(int floor, int originTileX, int originTileY, GameController.Direction direction, int length)
     {
-        Vector3 spawnPos = dicePos + new Vector3(0, 0.01f, 0); // 0.01f above tile level
+        Vector3 spawnPos = GameController.Instance.TileToWorldPosition(floor, originTileX, originTileY) + new Vector3(0, 0.01f, 0); // 0.01f above tile level
 
         for (int i = 0; i<length; i++)
         {
