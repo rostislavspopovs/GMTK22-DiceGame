@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class EffectsAndOverlaysManager : Singleton<EffectsAndOverlaysManager>
 {
-    [SerializeField] private GameObject highlightPlanePrefab;
+    [SerializeField] private HighlightPlane highlightPlanePrefab;
 
-    private List<GameObject> currentHighlightObjects = new List<GameObject>();
+    private List<HighlightPlane> currentHighlightObjects = new List<HighlightPlane>();
     // Start is called before the first frame update
     void Start()
     {
@@ -21,10 +21,12 @@ public class EffectsAndOverlaysManager : Singleton<EffectsAndOverlaysManager>
 
     public void CreateHighlights(TileMap tileMap, int floor, int originTileX, int originTileY, GameController.Direction direction, int length)
     {
+        ClearHighlights();
+
         int tileX = originTileX;
         int tileY = originTileY;
 
-        for (int i = 0; i<length; i++)
+        for (int i = 1; i<=length; i++)
         {
             switch (direction)
             {
@@ -36,15 +38,40 @@ public class EffectsAndOverlaysManager : Singleton<EffectsAndOverlaysManager>
             if (tileMap.IsSteppable(tileX, tileY))
             {
                 Vector3 spawnPos = GameController.Instance.TileToWorldPosition(floor, tileX, tileY) + new Vector3(0, 0.01f, 0); // 0.01f above tile level
-                currentHighlightObjects.Add(Instantiate(highlightPlanePrefab, spawnPos, new Quaternion(0, 0, 0, 0), this.transform));
-            } else { break; }
+
+                HighlightPlane highlight = Instantiate(highlightPlanePrefab, spawnPos, new Quaternion(0, 0, 0, 0), this.transform);
+                
+                if (i == length)
+                {
+                    highlight.SetHighlightColor(Color.blue);
+                }
+                else
+                {
+                    highlight.SetHighlightColor(Color.cyan);
+                }
+
+                highlight.SetText(i.ToString());
+
+                currentHighlightObjects.Add(highlight);
+            } 
+            else if (tileMap.IsVoid(tileX, tileY))
+            {
+                Vector3 spawnPos = GameController.Instance.TileToWorldPosition(floor, tileX, tileY) + new Vector3(0, 0.01f, 0); // 0.01f above tile level
+
+                HighlightPlane highlight = Instantiate(highlightPlanePrefab, spawnPos, new Quaternion(0, 0, 0, 0), this.transform);
+                highlight.SetHighlightColor(Color.red);
+
+                currentHighlightObjects.Add(highlight);
+                break;
+            }
+            else { break; }
         }
     }
      public void ClearHighlights()
     {
-        foreach(GameObject highlight in currentHighlightObjects)
+        foreach(HighlightPlane highlight in currentHighlightObjects)
         {
-            Destroy(highlight);
+            Destroy(highlight.gameObject);
         }
         currentHighlightObjects.Clear();
     }

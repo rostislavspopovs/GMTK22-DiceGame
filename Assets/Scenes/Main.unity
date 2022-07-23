@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dea3e67a2e5cea5428ff450cef8d5348, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightPlanePrefab: {fileID: 5410895057831036716, guid: 107d85f817b3b204ab268acf977cc7ee, type: 3}
+  highlightPlanePrefab: {fileID: 7190007080454541455, guid: 107d85f817b3b204ab268acf977cc7ee, type: 3}
 --- !u!4 &172169514
 Transform:
   m_ObjectHideFlags: 0
