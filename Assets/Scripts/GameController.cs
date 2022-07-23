@@ -47,7 +47,9 @@ public class GameController : Singleton<GameController>
                 CallNextStep(Direction.ZMinus);
             }
         }
-        else { Debug.Log("Key blocked -- already in sequence"); }
+        else { //Debug.Log("Key blocked -- already in sequence");
+               //
+               }
     }
 
     public void ResetSteps()
@@ -155,6 +157,7 @@ public class GameController : Singleton<GameController>
     {
         levelTileMaps = MapGenerator.Instance.GenerateMap(levels[level]);
         SpawnDie(levelTileMaps[1].GetStartTile(), 2);
+        CameraController.Instance.SetFocus(dice.transform);
     }
 
     private void SpawnDie((int,int) spawnPos, int floor)
@@ -180,7 +183,7 @@ public class GameController : Singleton<GameController>
         }
         try 
         {
-            Debug.Log(GetCurrentTileMap().GetTileState(newX, newZ));
+            //Debug.Log(GetCurrentTileMap().GetTileState(newX, newZ));
             if (GetCurrentTileMap().IsVoid(newX, newZ)) SteppedOnVoid(dir);
             return !GetCurrentTileMap().IsWall(newX, newZ);   
         } 

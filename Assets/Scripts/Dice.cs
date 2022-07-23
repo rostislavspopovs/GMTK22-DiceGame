@@ -13,8 +13,6 @@ public class Dice : MonoBehaviour
 
     private Animator anim;
 
-    private float rotSpeed = 10f;
-
     private bool moving;
     // Start is called before the first frame update
     void Start()
