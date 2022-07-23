@@ -24,6 +24,7 @@ public class GameController : Singleton<GameController>
     void Start()
     {
         StartLevel(0);
+        EffectsAndOverlaysManager.Instance.CreateHighlights(dice.transform.position, Direction.XPlus, 5);
     }
 
     void Update()
