@@ -21,8 +21,6 @@ public class EffectsAndOverlaysManager : Singleton<EffectsAndOverlaysManager>
 
     public void CreateHighlights(TileMap tileMap, int floor, int originTileX, int originTileY, GameController.Direction direction, int length)
     {
-        ClearHighlights();
-
         int tileX = originTileX;
         int tileY = originTileY;
 
@@ -50,7 +48,7 @@ public class EffectsAndOverlaysManager : Singleton<EffectsAndOverlaysManager>
                     highlight.SetHighlightColor(Color.cyan);
                 }
 
-                highlight.SetText(i.ToString());
+                //highlight.SetText(i.ToString());
 
                 currentHighlightObjects.Add(highlight);
             } 

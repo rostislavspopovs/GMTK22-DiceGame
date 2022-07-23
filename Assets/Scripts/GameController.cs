@@ -56,6 +56,9 @@ public class GameController : Singleton<GameController>
     {
         stepsLeft = GetCurrentNumberOnTop();
         inMoveSequence = false;
+        EffectsAndOverlaysManager.Instance.CreateHighlights(GetCurrentTileMap(), diceFloor, dicePos.Item1, dicePos.Item2, Direction.XPlus, stepsLeft);
+        EffectsAndOverlaysManager.Instance.CreateHighlights(GetCurrentTileMap(), diceFloor, dicePos.Item1, dicePos.Item2, Direction.XMinus, stepsLeft);
+        EffectsAndOverlaysManager.Instance.CreateHighlights(GetCurrentTileMap(), diceFloor, dicePos.Item1, dicePos.Item2, Direction.ZPlus, stepsLeft);
         EffectsAndOverlaysManager.Instance.CreateHighlights(GetCurrentTileMap(), diceFloor, dicePos.Item1, dicePos.Item2, Direction.ZMinus, stepsLeft);
     }
 

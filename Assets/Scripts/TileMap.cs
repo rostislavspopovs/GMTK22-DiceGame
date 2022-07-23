@@ -34,7 +34,7 @@ public class TileMap
 
     public bool IsVoid(int x, int y)
     {
-        if(x < 0 || x > width || y < 0 || y > width) return true;
+        if(x < 0 || x >= width || y < 0 || y >= width) return true;
         return map[x, y] == TileState.VOID;
     }
 
