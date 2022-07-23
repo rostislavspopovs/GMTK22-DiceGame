@@ -15,7 +15,7 @@ public class GameController : Singleton<GameController>
 
     private List<TileMap> levelTileMaps;
 
-    private int stepsLeft;
+    private int stepsLeft = 1;
 
     private bool inMoveSequence;
 
@@ -24,7 +24,6 @@ public class GameController : Singleton<GameController>
     void Start()
     {
         StartLevel(0);
-        EffectsAndOverlaysManager.Instance.CreateHighlights(diceFloor, dicePos.Item1, dicePos.Item2, Direction.XPlus, 5);
     }
 
     void Update()
@@ -33,19 +32,19 @@ public class GameController : Singleton<GameController>
         {
             if (Input.GetKeyDown(KeyCode.W))
             {
-                CallNextStep(Direction.XPlus);
+                BeginMoveSequence(Direction.XPlus);
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
-                CallNextStep(Direction.XMinus);
+                BeginMoveSequence(Direction.XMinus);
             }
             if (Input.GetKeyDown(KeyCode.A))
             {
-                CallNextStep(Direction.ZPlus);
+                BeginMoveSequence(Direction.ZPlus);
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
-                CallNextStep(Direction.ZMinus);
+                BeginMoveSequence(Direction.ZMinus);
             }
         }
         else { //Debug.Log("Key blocked -- already in sequence");
@@ -57,6 +56,13 @@ public class GameController : Singleton<GameController>
     {
         stepsLeft = GetCurrentNumberOnTop();
         inMoveSequence = false;
+        EffectsAndOverlaysManager.Instance.CreateHighlights(GetCurrentTileMap(), diceFloor, dicePos.Item1, dicePos.Item2, Direction.ZMinus, stepsLeft);
+    }
+
+    private void BeginMoveSequence(Direction dir)
+    {
+        CallNextStep(dir);
+        EffectsAndOverlaysManager.Instance.ClearHighlights();
     }
 
     public void CallNextStep(Direction dir)
