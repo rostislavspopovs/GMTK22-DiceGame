@@ -14,6 +14,8 @@ public class Dice : MonoBehaviour
     private Animator anim;
 
     private bool moving;
+
+    private float waitTime = 0.005f;
     // Start is called before the first frame update
     void Start()
     {
@@ -55,7 +57,7 @@ public class Dice : MonoBehaviour
                     for (int d = 0; d < 30; d++)
                     {
                         diceMesh.RotateAround(XP.position, Vector3.forward, -3);
-                        yield return new WaitForSeconds(Time.deltaTime);
+                        yield return new WaitForSeconds(waitTime);
                     }
                     diceMesh.transform.position -= new Vector3(1, 0, 0);
                     transform.position += new Vector3(1, 0, 0);
@@ -68,7 +70,7 @@ public class Dice : MonoBehaviour
                     for (int d = 0; d < 30; d++)
                     {
                         diceMesh.RotateAround(XM.position, Vector3.forward, 3);
-                        yield return new WaitForSeconds(Time.deltaTime);
+                        yield return new WaitForSeconds(waitTime);
                     }
                     diceMesh.transform.position -= new Vector3(-1, 0, 0);
                     transform.position += new Vector3(-1, 0, 0);
@@ -81,7 +83,7 @@ public class Dice : MonoBehaviour
                     for (int d = 0; d < 30; d++)
                     {
                         diceMesh.RotateAround(ZP.position, Vector3.right, 3);
-                        yield return new WaitForSeconds(Time.deltaTime);
+                        yield return new WaitForSeconds(waitTime);
                     }
                     diceMesh.transform.position -= new Vector3(0, 0, 1);
                     transform.position += new Vector3(0, 0, 1);
@@ -94,7 +96,7 @@ public class Dice : MonoBehaviour
                     for (int d = 0; d < 30; d++)
                     {
                         diceMesh.RotateAround(ZM.position, Vector3.right, -3);
-                        yield return new WaitForSeconds(Time.deltaTime);
+                        yield return new WaitForSeconds(waitTime);
                     }
                     diceMesh.transform.position -= new Vector3(0, 0, -1);
                     transform.position += new Vector3(0, 0, -1);

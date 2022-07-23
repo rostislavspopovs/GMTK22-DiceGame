@@ -7,6 +7,9 @@ public class GameController : Singleton<GameController>
     [SerializeField] private List<Level> levels;
     [SerializeField] private GameObject dicePrefab;
 
+    public delegate void OnStepAction(int stepsleft);
+    public event OnStepAction OnStepEvent;
+
     public enum Direction { XPlus, XMinus, ZPlus, ZMinus}
 
     private Dice dice;
@@ -52,6 +55,11 @@ public class GameController : Singleton<GameController>
                }
     }
 
+    public void AddOnStepEventAction(OnStepAction action)
+    {
+        OnStepEvent += action;
+    }
+
     public void ResetSteps()
     {
         stepsLeft = GetCurrentNumberOnTop();
@@ -60,6 +68,8 @@ public class GameController : Singleton<GameController>
         EffectsAndOverlaysManager.Instance.CreateHighlights(GetCurrentTileMap(), diceFloor, dicePos.Item1, dicePos.Item2, Direction.XMinus, stepsLeft);
         EffectsAndOverlaysManager.Instance.CreateHighlights(GetCurrentTileMap(), diceFloor, dicePos.Item1, dicePos.Item2, Direction.ZPlus, stepsLeft);
         EffectsAndOverlaysManager.Instance.CreateHighlights(GetCurrentTileMap(), diceFloor, dicePos.Item1, dicePos.Item2, Direction.ZMinus, stepsLeft);
+
+        OnStepEvent?.Invoke(stepsLeft);
     }
 
     private void BeginMoveSequence(Direction dir)
@@ -146,6 +156,7 @@ public class GameController : Singleton<GameController>
                     break;
                 }
         }
+        OnStepEvent?.Invoke(stepsLeft);
     }
 
     public bool CanMoveInDir(Direction dir)
