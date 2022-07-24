@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : Singleton<CameraController>
+public class CameraFollower : MonoBehaviour
 {
-    private Transform focus;
+    [SerializeField] private Transform focus;
     [Range(0,0.2f)] [SerializeField] private float followSmoothingFactor;
 
     [SerializeField] private Vector3 camOffset = new Vector3(1, 1, 1);

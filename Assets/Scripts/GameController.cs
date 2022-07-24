@@ -7,6 +7,8 @@ public class GameController : Singleton<GameController>
     [SerializeField] private List<Level> levels;
     [SerializeField] private GameObject dicePrefab;
 
+    [SerializeField] private CameraFollower mainCameraFollower;
+
     public delegate void OnStepAction(int stepsleft);
     public event OnStepAction OnStepEvent;
 
@@ -227,7 +229,7 @@ public class GameController : Singleton<GameController>
     {
         levelTileMaps = MapGenerator.Instance.GenerateMap(levels[level]);
         SpawnDie(levelTileMaps[1].GetStartTile(), 2);
-        CameraController.Instance.SetFocus(dice.transform);
+        mainCameraFollower.SetFocus(dice.transform);
     }
 
     private void SpawnDie((int, int) spawnPos, int floor)
