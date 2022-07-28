@@ -71,7 +71,7 @@ public class GameController : Singleton<GameController>
         EffectsAndOverlaysManager.Instance.CreateHighlights(GetCurrentTileMap(), diceFloor, dicePos.Item1, dicePos.Item2, Direction.ZPlus, stepsLeft);
         EffectsAndOverlaysManager.Instance.CreateHighlights(GetCurrentTileMap(), diceFloor, dicePos.Item1, dicePos.Item2, Direction.ZMinus, stepsLeft);
 
-        DiceIndicatorController.Instance.ResetDots(stepsLeft);
+        DiceIndicatorController.Instance.ResetDots(stepsLeft, 0.1f);
         OnStepEvent?.Invoke(stepsLeft);
     }
 
@@ -83,7 +83,7 @@ public class GameController : Singleton<GameController>
 
     public void CallNextStep(Direction dir)
     {
-        DiceIndicatorController.Instance.DecrementDot(stepsLeft);
+        DiceIndicatorController.Instance.DecrementDot(stepsLeft,dir);
         if (stepsLeft == 0 || interruptSequence)
         {
             inMoveSequence = false;
