@@ -73,12 +73,13 @@ public class GameController : Singleton<GameController>
 
         DiceIndicatorController.Instance.ResetDots(stepsLeft, 0.1f);
         OnStepEvent?.Invoke(stepsLeft);
+        Debug.Log($"Steps reset! Steps left: {stepsLeft}");
     }
 
     private void BeginMoveSequence(Direction dir)
     {
-        CallNextStep(dir);
         EffectsAndOverlaysManager.Instance.ClearHighlights();
+        CallNextStep(dir);
     }
 
     public void CallNextStep(Direction dir)
@@ -98,7 +99,8 @@ public class GameController : Singleton<GameController>
                 {
                     if (!CanMoveInDir(Direction.XPlus))
                     {
-                        ResetSteps(); Debug.Log("Hit Wall"); 
+                        ResetSteps(); 
+                        Debug.Log("Hit Wall"); 
                     }
                     else 
                     { 
@@ -114,7 +116,8 @@ public class GameController : Singleton<GameController>
                 {
                     if (!CanMoveInDir(Direction.XMinus))
                     {
-                        ResetSteps(); Debug.Log("Hit Wall");
+                        ResetSteps();
+                        Debug.Log("Hit Wall");
                     }
                     else
                     {
@@ -130,7 +133,8 @@ public class GameController : Singleton<GameController>
                 {
                     if (!CanMoveInDir(Direction.ZPlus))
                     {
-                        ResetSteps(); Debug.Log("Hit Wall");
+                        ResetSteps();
+                        Debug.Log("Hit Wall");
                     }
                     else
                     {
@@ -146,7 +150,8 @@ public class GameController : Singleton<GameController>
                 {
                     if (!CanMoveInDir(Direction.ZMinus))
                     {
-                        ResetSteps(); Debug.Log("Hit Wall");
+                        ResetSteps();
+                        Debug.Log("Hit Wall");
                     }
                     else
                     {
@@ -214,16 +219,24 @@ public class GameController : Singleton<GameController>
         return new Vector3(tileX, floor * 4 + 0.5f, tileY);
     }
 
+    public Vector3 DirToVector(Direction dir)
+    {
+        switch (dir)
+        {
+            case Direction.XPlus: return new Vector3(1, 0, 0);
+            case Direction.XMinus: return new Vector3(-1, 0, 0);
+            case Direction.ZPlus: return new Vector3(0, 0, 1);
+            case Direction.ZMinus: return new Vector3(0, 0, -1);
+            default: return Vector3.zero;
+        }
+
+    }
+
     private void SteppedOnVoid(Direction fromDir)
     {
         interruptSequence = true;
 
-        //switch (fromDir)
-        //{
-        //}
-
-
-        dice.Ragdoll(Vector3.down * 15);
+        dice.Ragdoll(DirToVector(fromDir));
     }
 
     private void StartLevel(int level)
@@ -231,6 +244,7 @@ public class GameController : Singleton<GameController>
         levelTileMaps = MapGenerator.Instance.GenerateMap(levels[level]);
         SpawnDie(levelTileMaps[1].GetStartTile(), 2);
         mainCameraFollower.SetFocus(dice.transform);
+        ResetSteps();
     }
 
     private void SpawnDie((int, int) spawnPos, int floor)

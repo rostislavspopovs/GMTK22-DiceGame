@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Dice : MonoBehaviour
 {
+    private Rigidbody rb;
+
     private Transform diceMesh;
     private Transform pivotSquare;
     private Transform XP;
@@ -16,8 +18,8 @@ public class Dice : MonoBehaviour
     private bool moving;
 
     private float waitTime = 0.005f;
-    // Start is called before the first frame update
-    void Start()
+
+    void OnEnable()
     {
         diceMesh = transform.GetChild(0);
         pivotSquare = transform.GetChild(1);
@@ -27,6 +29,7 @@ public class Dice : MonoBehaviour
         ZM = pivotSquare.transform.GetChild(3);
 
         anim = GetComponent<Animator>();
+        rb = diceMesh.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -39,7 +42,7 @@ public class Dice : MonoBehaviour
     {
         if (!moving)
         {
-            toggleAnimator(false);
+            ToggleAnimator(false);
             StartCoroutine(MoveEnumerator(dir));
             return true;
         }
@@ -109,16 +112,19 @@ public class Dice : MonoBehaviour
         //toggleAnimator(true);
     }
 
-    private void toggleAnimator(bool toggle)
+    private void ToggleAnimator(bool toggle)
     {
         anim.enabled = toggle;
     }
 
 
-    public void Ragdoll(Vector3 force)
+    public void Ragdoll(Vector3 forceDir)
     {
-        GetComponent<Rigidbody>().isKinematic = false;
-        GetComponent<Rigidbody>().AddForce(force, ForceMode.VelocityChange);
+        rb.isKinematic = false;
+        //Vector3 forcePos = (diceMesh.transform.position - forceDir) + new Vector3(Random.Range(-0.5f, 0.5f), -1, Random.Range(-0.5f, 0.5f));
+        //Debug.DrawLine(forcePos, forcePos + forceDir, Color.red, 20, false);
+        rb.AddExplosionForce(2, transform.position-forceDir, 5, 0.5f, ForceMode.VelocityChange);
+        Debug.DrawLine(transform.position - forceDir, transform.position, Color.red, 20, false);
     }
 
     public Transform getDiceMesh() 

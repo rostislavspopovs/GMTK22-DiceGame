@@ -49,7 +49,7 @@ public class DiceIndicatorController : Singleton<DiceIndicatorController>
     {
         if (stepsLeft == 0) return;
         Debug.Log("Decremented Dots: " + currentDots.Count);
-        RemoveDot(currentDots[0]);
+        if(currentDots.Count > 0) RemoveDot(currentDots[0]);
         AnimateSelector(dir);
     }
 
