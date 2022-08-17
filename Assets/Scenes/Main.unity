@@ -819,6 +819,7 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -906,6 +907,19 @@ MonoBehaviour:
   focus: {fileID: 0}
   followSmoothingFactor: 0.03
   camOffset: {x: -3, y: 3, z: -3}
+--- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0566198b50d97eb4893d48de6f5945b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectMaterial: {fileID: 2100000, guid: fc6887b39dd742946aa047c89d53ae8e, type: 2}
 --- !u!1 &973729663
 GameObject:
   m_ObjectHideFlags: 0
@@ -937,10 +951,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapParent: {fileID: 2039709104}
   tilePrefabs:
-  - {fileID: 919132149155446097, guid: e9b4e4bb45b9777418ed2f53f8d8b935, type: 3}
-  - {fileID: 919132149155446097, guid: d69f24e1611af9c43b6d3dbef529e3b1, type: 3}
-  - {fileID: 919132149155446097, guid: a3dff2d47eb38eb43bfd0e0b87f6f5b7, type: 3}
-  - {fileID: 919132149155446097, guid: 3ae1654094738e5488697f487903e562, type: 3}
+  - {fileID: 2544806931428325884, guid: ad2911e2bae9e3f438dbce2d127d6908, type: 3}
+  - {fileID: 3298119920955261778, guid: 73f5b38817e06ee47b817e2eb6a0a172, type: 3}
+  - {fileID: 186749219926596525, guid: f163b92ab19ad7342beb926c35702f1d, type: 3}
+  - {fileID: 2439314615233969963, guid: e5c5bf535c89f1249881986375ee0a4f, type: 3}
   wallPrefabs:
   - {fileID: 919132149155446097, guid: abbb2231307fa5e42be6490219a3bca3, type: 3}
   finishPrefab: {fileID: 919132149155446097, guid: 7b261eb5f9dc0844f802a6ebeaff2cc4, type: 3}
