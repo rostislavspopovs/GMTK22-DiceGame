@@ -9,6 +9,9 @@ public class GameController : Singleton<GameController>
 
     [SerializeField] private CameraFollower mainCameraFollower;
 
+    [Header("Controls")]
+    [SerializeField] private float tiltThreshold = 2f;
+
     public delegate void OnStepAction(int stepsleft);
     public event OnStepAction OnStepEvent;
 
@@ -51,6 +54,29 @@ public class GameController : Singleton<GameController>
             {
                 BeginMoveSequence(Direction.ZMinus);
             }
+
+
+            float y = -Input.acceleration.y;
+            float x = Input.acceleration.x;
+
+            if (y > tiltThreshold)
+            {
+                BeginMoveSequence(Direction.XPlus);
+            }
+            if (y < -tiltThreshold)
+            {
+                BeginMoveSequence(Direction.XMinus);
+            }
+            if (x > tiltThreshold)
+            {
+                BeginMoveSequence(Direction.ZPlus);
+            }
+            if (x < -tiltThreshold)
+            {
+                BeginMoveSequence(Direction.ZMinus);
+            }
+
+
         }
         else { //Debug.Log("Key blocked -- already in sequence");
                //
@@ -62,16 +88,18 @@ public class GameController : Singleton<GameController>
         OnStepEvent += action;
     }
 
-    public void ResetSteps()
+    public void ResetSteps(bool restarting = false)
     {
-        stepsLeft = GetCurrentNumberOnTop();
+        stepsLeft = restarting ? 1 : GetCurrentNumberOnTop();
         inMoveSequence = false;
         EffectsAndOverlaysManager.Instance.CreateHighlights(GetCurrentTileMap(), diceFloor, dicePos.Item1, dicePos.Item2, Direction.XPlus, stepsLeft);
         EffectsAndOverlaysManager.Instance.CreateHighlights(GetCurrentTileMap(), diceFloor, dicePos.Item1, dicePos.Item2, Direction.XMinus, stepsLeft);
         EffectsAndOverlaysManager.Instance.CreateHighlights(GetCurrentTileMap(), diceFloor, dicePos.Item1, dicePos.Item2, Direction.ZPlus, stepsLeft);
         EffectsAndOverlaysManager.Instance.CreateHighlights(GetCurrentTileMap(), diceFloor, dicePos.Item1, dicePos.Item2, Direction.ZMinus, stepsLeft);
 
-        DiceIndicatorController.Instance.ResetDots(stepsLeft, 0.1f);
+        if (restarting) DiceIndicatorController.Instance.Toggle(true, stepsLeft);
+        else DiceIndicatorController.Instance.ResetDots(stepsLeft, 0.1f);
+
         OnStepEvent?.Invoke(stepsLeft);
         Debug.Log($"Steps reset! Steps left: {stepsLeft}");
     }
@@ -88,6 +116,7 @@ public class GameController : Singleton<GameController>
         if (stepsLeft == 0 || interruptSequence)
         {
             inMoveSequence = false;
+            interruptSequence = false;
             ResetSteps();
             return;
         }
@@ -232,11 +261,20 @@ public class GameController : Singleton<GameController>
 
     }
 
+    public void Restart(int level, float delay = 0)
+    {
+        StartCoroutine(RestartEnumerator(level, delay));
+    }
+
     private void SteppedOnVoid(Direction fromDir)
     {
         interruptSequence = true;
 
         dice.Ragdoll(DirToVector(fromDir));
+
+        DiceIndicatorController.Instance.Toggle(false);
+
+        Restart(level: 0, delay: 2f);
     }
 
     private void StartLevel(int level)
@@ -253,6 +291,18 @@ public class GameController : Singleton<GameController>
         dice = diceObj.GetComponent<Dice>();
         dicePos = spawnPos;
         diceFloor = floor;
+    }
+
+    private IEnumerator RestartEnumerator(int level, float delay = 0)
+    {
+        yield return new WaitForSeconds(delay);
+
+
+        Destroy(dice.gameObject);
+        EffectsAndOverlaysManager.Instance.ClearHighlights();
+        SpawnDie(levelTileMaps[1].GetStartTile(), 2);
+        mainCameraFollower.SetFocus(dice.transform);
+        ResetSteps(restarting: true);
     }
 
 }

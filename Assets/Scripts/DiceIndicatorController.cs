@@ -24,6 +24,12 @@ public class DiceIndicatorController : Singleton<DiceIndicatorController>
         currentDots = new List<RawImage>(dotOverlayTransform.GetChild(0).GetComponentsInChildren<RawImage>());
     }
 
+    public void Toggle(bool toggle, int newface = 1)
+    {
+        GetComponent<CanvasGroup>().alpha = toggle ? 1 : 0.25f;
+        if (toggle) ResetDots(newface, 0);
+    }
+
     public void ResetDots(int face, float delay)
     {
         StartCoroutine(IResetDots(face, delay));
@@ -37,7 +43,7 @@ public class DiceIndicatorController : Singleton<DiceIndicatorController>
             RemoveDot(currentDot);
         }
 
-        Destroy(dotOverlayTransform.GetChild(0).gameObject);
+        if(dotOverlayTransform.childCount > 0) Destroy(dotOverlayTransform.GetChild(0).gameObject);
 
         GameObject dots = Instantiate(faceDotPrefabs[face - 1], dotOverlayTransform);
         currentDots = new List<RawImage>(dots.GetComponentsInChildren<RawImage>());
