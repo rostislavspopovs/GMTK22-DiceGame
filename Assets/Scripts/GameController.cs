@@ -77,8 +77,12 @@ public class GameController : Singleton<GameController>
 
     public void BeginMoveSequence(Direction dir)
     {
-        EffectsAndOverlaysManager.Instance.ClearHighlights();
-        CallNextStep(dir);
+        if (!inMoveSequence)
+        {
+            EffectsAndOverlaysManager.Instance.ClearHighlights();
+            CallNextStep(dir);
+        }
+        else Debug.LogWarning("Cannot begin new move sequence while current one is in motion!");
     }
 
     public void CallNextStep(Direction dir)
