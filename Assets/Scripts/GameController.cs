@@ -9,9 +9,6 @@ public class GameController : Singleton<GameController>
 
     [SerializeField] private CameraFollower mainCameraFollower;
 
-    [Header("Controls")]
-    [SerializeField] private float tiltThreshold = 2f;
-
     public delegate void OnStepAction(int stepsleft);
     public event OnStepAction OnStepEvent;
 
@@ -38,49 +35,23 @@ public class GameController : Singleton<GameController>
     {
         if (!inMoveSequence)
         {
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                BeginMoveSequence(Direction.XPlus);
-            }
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                BeginMoveSequence(Direction.XMinus);
-            }
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                BeginMoveSequence(Direction.ZPlus);
-            }
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                BeginMoveSequence(Direction.ZMinus);
-            }
-
-
-            float y = -Input.acceleration.y;
-            float x = Input.acceleration.x;
-
-            if (y > tiltThreshold)
-            {
-                BeginMoveSequence(Direction.XPlus);
-            }
-            if (y < -tiltThreshold)
-            {
-                BeginMoveSequence(Direction.XMinus);
-            }
-            if (x > tiltThreshold)
-            {
-                BeginMoveSequence(Direction.ZPlus);
-            }
-            if (x < -tiltThreshold)
-            {
-                BeginMoveSequence(Direction.ZMinus);
-            }
-
-
+            //if (Input.GetKeyDown(KeyCode.W))
+            //{
+            //    BeginMoveSequence(Direction.XPlus);
+            //}
+            //if (Input.GetKeyDown(KeyCode.S))
+            //{
+            //    BeginMoveSequence(Direction.XMinus);
+            //}
+            //if (Input.GetKeyDown(KeyCode.A))
+            //{
+            //    BeginMoveSequence(Direction.ZPlus);
+            //}
+            //if (Input.GetKeyDown(KeyCode.D))
+            //{
+            //    BeginMoveSequence(Direction.ZMinus);
+            //}
         }
-        else { //Debug.Log("Key blocked -- already in sequence");
-               //
-               }
     }
 
     public void AddOnStepEventAction(OnStepAction action)
@@ -104,7 +75,7 @@ public class GameController : Singleton<GameController>
         Debug.Log($"Steps reset! Steps left: {stepsLeft}");
     }
 
-    private void BeginMoveSequence(Direction dir)
+    public void BeginMoveSequence(Direction dir)
     {
         EffectsAndOverlaysManager.Instance.ClearHighlights();
         CallNextStep(dir);
